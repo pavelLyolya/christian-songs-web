@@ -1,0 +1,84 @@
+.content-wrap {
+  padding: 50px 0;
+}
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+.song-info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+#song-name {
+  width: 30%;
+}
+.label {
+  margin-bottom: 10px;
+}
+input[type=number] {
+  width: 35px;
+}
+.song-chords {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.section {
+  flex-shrink: 0;
+  width: 49%;
+  min-width: 430px;
+  margin: 10px 0;
+}
+.section-title {
+  font-size: 25px;
+  font-weight: bold;
+}
+.verse {
+  width: 100%;
+  margin: 10px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ff7970;
+}
+.verse-title {
+  padding: 0 5px;
+  color: #a54e48;
+  font-weight: bold;
+}
+.verse-row {
+  width: 98%;
+}
+.verse-row:not(:last-child), .chords-row:not(:last-child) {
+  margin-bottom: 7px;
+}
+#submit {
+  margin-left: auto;
+  padding: 5px 15px;
+  box-shadow: 3px 3px 6px #3d2d2d;
+  background-color: #fb5145;
+  font-size: 25px;
+}
+select[name=chords] {
+  margin-right: 5px;
+}
+
+@media screen and (max-width: 885px) {
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  #submit {
+    margin: 0;
+  }
+  .song-info {
+    width: 430px;
+  }
+  #song-name {
+    width: 71%;
+  }
+}
