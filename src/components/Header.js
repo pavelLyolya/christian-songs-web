@@ -1,5 +1,5 @@
 import React from 'react';
-import cross from './cross.png';
+import cross from '../assets/cross.png';
 import './styles/Header.css';
 
 function App() {
