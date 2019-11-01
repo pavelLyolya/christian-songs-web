@@ -1,13 +1,32 @@
 import React from 'react';
-import './styles/Main.css';
+import {
+  makeStyles,
+  Button,
+  TextField,
+} from '@material-ui/core';
+import '../styles/Main.css';
+
+const useStyles = makeStyles(theme => ({
+  verseRowButton: {
+    margin: '0 10px',
+  },
+}));
 
 function Main() {
+  const classes = useStyles();
+
   return (
     <main className="content">
       <div className="content-wrap wrap">
         <form className="form">
           <section className="song-info">
-            <label className="label">Название песни: <input id="song-name" type="text" required /></label>
+            <TextField
+              id="song-name"
+              label='Название песни'
+              margin='normal'
+              variant='outlined'
+              required
+            />
           </section>
           <section className="song-text section">
             <h2 className="section-title">Текст песни</h2>
@@ -15,13 +34,13 @@ function Main() {
               <fieldset className="verse">
                 <legend className="verse-title">
                   <span>Куплет</span>
-                  <button className="add-row">Добавить строку</button>
-                  <button className="delete-row">Удалить строку</button>
+                  <Button classes={{ root: classes.verseRowButton }} variant='contained' className="add-row">Добавить строку</Button>
+                  <Button variant='contained' className="delete-row">Удалить строку</Button>
                 </legend>
-                <input className="verse-row" type="text" required />
-                <input className="verse-row" type="text" required />
-                <input className="verse-row" type="text" required />
-                <input className="verse-row" type="text" required />
+                <TextField required />
+                <TextField required />
+                <TextField required />
+                <TextField required />
               </fieldset>
             </div>
             <button className="add-verse">Добавить куплет</button>
@@ -32,10 +51,10 @@ function Main() {
                 <button className="add-row">Добавить строку</button>
                 <button className="delete-row">Удалить строку</button>
               </legend>
-              <input className="verse-row" type="text" required />
-              <input className="verse-row" type="text" required />
-              <input className="verse-row" type="text" required />
-              <input className="verse-row" type="text" required />
+              <TextField required />
+              <TextField required />
+              <TextField required />
+              <TextField required />
             </fieldset>
             <fieldset className="verse bridge">
               <legend className="verse-title">
@@ -44,10 +63,10 @@ function Main() {
                 <button className="add-row">Добавить строку</button>
                 <button className="delete-row">Удалить строку</button>
               </legend>
-              <input className="verse-row" type="text" required />
-              <input className="verse-row" type="text" required />
-              <input className="verse-row" type="text" required />
-              <input className="verse-row" type="text" required />
+              <TextField required />
+              <TextField required />
+              <TextField required />
+              <TextField required />
             </fieldset>
           </section>
           <section className="song-chords section">
