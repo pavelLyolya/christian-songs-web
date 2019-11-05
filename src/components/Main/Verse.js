@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import {
   makeStyles,
   Button,
@@ -19,66 +19,69 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Verse({ type, remove, verse, update }) {
+function Verse({ isButtonsDrawn, type, remove, verse, update, incRowsCount, decRowsCount }) {
   const classes = useStyles();
-
-  const [verseRows, setVerseRows] = useState(verse.lines);
 
   const changeVerseRow = useCallback(
     (index, value) => {
-      const newRows = verseRows.slice();
+      const newRows = verse.lines.slice();
       newRows[index] = value;
-      setVerseRows(newRows);
       update(newRows);
     },
-    [verseRows],
+    [verse.lines, update],
   );
   const addRow = useCallback(
     () => {
-      const newRows = verseRows.slice();
+      const newRows = verse.lines.slice();
       newRows.push('');
-      setVerseRows(newRows);
       update(newRows);
+      incRowsCount();
     },
-    [verseRows],
+    [verse.lines, update, incRowsCount],
   );
   const removeRow = useCallback(
     () => {
-      const newRows = verseRows.slice();
+      const newRows = verse.lines.slice();
       newRows.pop();
-      setVerseRows(newRows);
       update(newRows);
+      decRowsCount();
     },
-    [verseRows],
+    [verse.lines, update, decRowsCount],
   );
 
-  if (!verse) return null;
+  if (!verse.lines) return null;
   return (
     <fieldset className='verse'>
       <legend className='verse-title'>
         <span className='verse-title-text'>{verseTypes[type]}</span>
-        <Button
-          onClick={addRow}
-          classes={{ root: classes.verseRowButton }}
-          variant='contained'
-          size='small'
-        >
-          Добавить строку
-        </Button>
-        <Button
-          onClick={removeRow}
-          classes={{ root: classes.verseRowButton }}
-          variant='contained'
-          size='small'
-        >
-          Удалить строку
-        </Button>
+        {
+          isButtonsDrawn && (
+            <>
+            <Button
+              onClick={addRow}
+              classes={{ root: classes.verseRowButton }}
+              variant='contained'
+              size='small'
+            >
+              Добавить строку
+            </Button>
+            <Button
+              onClick={removeRow}
+              classes={{ root: classes.verseRowButton }}
+              variant='contained'
+              size='small'
+            >
+              Удалить строку
+            </Button>
+            </>
+          )
+        }
         <IconButton onClick={remove} aria-label='delete' size='small'>
           <DeleteIcon fontSize='large' />
         </IconButton>
       </legend>
-      {verseRows.map((row, index) => <TextField
-        value={row}
+      {verse.lines.map((row, index) => <TextField
+        key={index} value={row}
         onChange={(e) => changeVerseRow(index, e.target.value)}
         required
       />)}
