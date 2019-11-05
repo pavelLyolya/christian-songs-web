@@ -7,7 +7,12 @@ import {
 import '../../styles/Main.css';
 import Verse from './Verse';
 import Chords from './Chords';
-import { createEmptyVerse, setRowsCountForVerse } from '../../helpers';
+import {
+  createEmptyVerse,
+  createEmptyChords,
+  setRowsCountForVerse,
+  updateChordsRowCount
+} from '../../helpers';
 
 const useStyles = makeStyles(theme => ({
   verseRowButton: {
@@ -26,8 +31,16 @@ function Main() {
   const [ verses, setVerses ] = useState([{ lines: createEmptyVerse(versesRowsCount) }]);
   const [ chorus, setChorus ] = useState({ lines: createEmptyVerse(chorusRowsCount) });
   const [ bridge, setBridge ] = useState({ lines: createEmptyVerse(bridgeRowsCount) });
-
-  console.log(verses);
+  const [ verseChords, setVerseChords ] = useState(createEmptyChords(versesRowsCount));
+  console.log(verseChords)
+  const setVerseChord = useCallback(
+    (rowIndex, chordIndex, value) => {
+      const newVerseChords = verseChords.slice();
+      verseChords[rowIndex][chordIndex] = value;
+      setVerseChords(newVerseChords);
+    },
+    [verseChords],
+  );
 
   const changeSongName = useCallback((e) => setSongName(e.target.value), []);
 
@@ -54,10 +67,11 @@ function Main() {
       const newVersesRowsCount = versesRowsCount + 1;
       setVersesRowsCount(newVersesRowsCount);
       const newVersesArray = verses.map((verse) => ({ lines: setRowsCountForVerse(verse.lines, newVersesRowsCount) }));
-      console.log(newVersesArray);
+      const newVerseChords = updateChordsRowCount(verseChords, newVersesRowsCount);
+      setVerseChords(newVerseChords);
       setVerses(newVersesArray);
     },
-    [verses, versesRowsCount],
+    [verses, versesRowsCount, verseChords],
   );
   const decVersesRowsCount = useCallback(
     () => {
@@ -65,10 +79,11 @@ function Main() {
       const newVersesRowsCount = versesRowsCount - 1;
       setVersesRowsCount(newVersesRowsCount);
       const newVersesArray = verses.map((verse, index) => ({ lines: setRowsCountForVerse(verse.lines, newVersesRowsCount) }));
-      console.log(newVersesArray);
+      const newVerseChords = updateChordsRowCount(verseChords, newVersesRowsCount);
+      setVerseChords(newVerseChords);
       setVerses(newVersesArray);
     },
-    [verses, versesRowsCount],
+    [verses, versesRowsCount, verseChords],
   );
 
   const addChorus = useCallback(
@@ -83,7 +98,6 @@ function Main() {
       const newChorusRowsCount = chorusRowsCount + 1;
       setChorusRowsCount(newChorusRowsCount);
       const newChorusArray = { lines: setRowsCountForVerse(chorus.lines, newChorusRowsCount) };
-      console.log(newChorusArray);
       setChorus(newChorusArray);
     },
     [chorus, chorusRowsCount],
@@ -94,7 +108,6 @@ function Main() {
       const newChorusRowsCount = chorusRowsCount - 1;
       setChorusRowsCount(newChorusRowsCount);
       const newChorusArray = { lines: setRowsCountForVerse(chorus.lines, newChorusRowsCount) };
-      console.log(newChorusArray);
       setChorus(newChorusArray);
     },
     [chorus, chorusRowsCount],
@@ -112,7 +125,6 @@ function Main() {
       const newBridgeRowsCount = bridgeRowsCount + 1;
       setBridgeRowsCount(newBridgeRowsCount);
       const newBridgeArray = { lines: setRowsCountForVerse(bridge.lines, newBridgeRowsCount) };
-      console.log(newBridgeArray);
       setBridge(newBridgeArray);
     },
     [bridge, bridgeRowsCount],
@@ -123,7 +135,6 @@ function Main() {
       const newBridgeRowsCount = bridgeRowsCount - 1;
       setBridgeRowsCount(newBridgeRowsCount);
       const newBridgeArray = { lines: setRowsCountForVerse(bridge.lines, newBridgeRowsCount) };
-      console.log(newBridgeArray);
       setBridge(newBridgeArray);
     },
     [bridge, bridgeRowsCount],
@@ -189,7 +200,11 @@ function Main() {
             }
           </section>
           <section className='song-chords section'>
-            { !!verses.length && <Chords type='verse' /> }
+            { !!verses.length && <Chords
+              type='verse'
+              chords={verseChords}
+              setChord={setVerseChord}
+            /> }
             { chorus && <Chords type='chorus' /> }
             { bridge && <Chords type='bridge' /> }
           </section>

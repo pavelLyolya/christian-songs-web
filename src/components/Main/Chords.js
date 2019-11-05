@@ -5,6 +5,7 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
+import { chordsArray } from '../../constants';
 
 const verseTypes = {
   verse: 'Куплет',
@@ -19,37 +20,31 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Verse({ type }) {
+function Chords({ type, chords, setChord }) {
   const classes = useStyles();
-  const [age, setAge] = React.useState('');
 
-  const handleChange = event => {
-    setAge(event.target.value);
-  };
-
+  if (!chords) return null;
   return (
     <fieldset id='verse-chords' className='verse'>
       <legend className='verse-title'>{verseTypes[type]}</legend>
-      <div className='chords-row'>
-        <FormControl className={classes.formControl}>
-          <Select
-            id='demo-simple-select-outlined'
-            value={age}
-            onChange={handleChange}
-          >
-            <MenuItem value=''>
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
-        <button onClick={(e) => {e.preventDefault();console.log('hi');}} className='add-chord'>&#43;</button>
-        <button className='delete-chord'>&#8722;</button>
-      </div>
+      {chords.map((chordsRow, rowIndex) => (
+        <div className='chords-row'>
+          {chordsRow.map((chord, chordIndex) => (
+            <FormControl className={classes.formControl}>
+              <Select
+                value={chord}
+                onChange={(e) => setChord(rowIndex, chordIndex, e.target.value)}
+              >
+                {chordsArray.map((chordConstant) => <MenuItem value={chordConstant}>{chordConstant}</MenuItem>)}
+              </Select>
+            </FormControl>
+          ))}
+          <button onClick={(e) => {e.preventDefault();console.log('hi');}} className='add-chord'>&#43;</button>
+          <button className='delete-chord'>&#8722;</button>
+        </div>
+      ))}
     </fieldset>
   );
 }
 
-export default Verse;
+export default Chords;
