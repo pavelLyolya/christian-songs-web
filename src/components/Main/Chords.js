@@ -28,14 +28,14 @@ function Chords({ type, chords, setChord, addChord, removeChord }) {
     <fieldset id='verse-chords' className='verse'>
       <legend className='verse-title'>{verseTypes[type]}</legend>
       {chords.map((chordsRow, rowIndex) => (
-        <div className='chords-row'>
+        <div key={rowIndex} className='chords-row'>
           {chordsRow.map((chord, chordIndex) => (
-            <FormControl className={classes.formControl}>
+            <FormControl key={chordIndex} className={classes.formControl}>
               <Select
                 value={chord}
                 onChange={(e) => setChord(rowIndex, chordIndex, e.target.value)}
               >
-                {chordsArray.map((chordConstant) => <MenuItem value={chordConstant}>{chordConstant}</MenuItem>)}
+                {chordsArray.map((chordConstant, index) => <MenuItem key={index} value={chordConstant}>{chordConstant}</MenuItem>)}
               </Select>
             </FormControl>
           ))}

@@ -34,7 +34,7 @@ function Main() {
   const [ verseChords, setVerseChords ] = useState(createEmptyChords(versesRowsCount));
   const [ chorusChords, setChorusChords ] = useState(createEmptyChords(chorusRowsCount));
   const [ bridgeChords, setBridgeChords ] = useState(createEmptyChords(bridgeRowsCount));
-  console.log(verseChords)
+
   const setVerseChord = useCallback(
     (rowIndex, chordIndex, value) => {
       const newVerseChords = verseChords.slice();
