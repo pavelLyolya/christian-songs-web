@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Chords({ type, chords, setChord }) {
+function Chords({ type, chords, setChord, addChord, removeChord }) {
   const classes = useStyles();
 
   if (!chords) return null;
@@ -39,8 +39,8 @@ function Chords({ type, chords, setChord }) {
               </Select>
             </FormControl>
           ))}
-          <button onClick={(e) => {e.preventDefault();console.log('hi');}} className='add-chord'>&#43;</button>
-          <button className='delete-chord'>&#8722;</button>
+          <button onClick={(e) => { e.preventDefault(); addChord(rowIndex); }} className='add-chord'>&#43;</button>
+          <button onClick={(e) => { e.preventDefault(); removeChord(rowIndex); }} className='delete-chord'>&#8722;</button>
         </div>
       ))}
     </fieldset>

@@ -32,14 +32,83 @@ function Main() {
   const [ chorus, setChorus ] = useState({ lines: createEmptyVerse(chorusRowsCount) });
   const [ bridge, setBridge ] = useState({ lines: createEmptyVerse(bridgeRowsCount) });
   const [ verseChords, setVerseChords ] = useState(createEmptyChords(versesRowsCount));
+  const [ chorusChords, setChorusChords ] = useState(createEmptyChords(chorusRowsCount));
+  const [ bridgeChords, setBridgeChords ] = useState(createEmptyChords(bridgeRowsCount));
   console.log(verseChords)
   const setVerseChord = useCallback(
     (rowIndex, chordIndex, value) => {
       const newVerseChords = verseChords.slice();
-      verseChords[rowIndex][chordIndex] = value;
+      newVerseChords[rowIndex][chordIndex] = value;
       setVerseChords(newVerseChords);
     },
     [verseChords],
+  );
+  const setChorusChord = useCallback(
+    (rowIndex, chordIndex, value) => {
+      const newChorusChords = chorusChords.slice();
+      newChorusChords[rowIndex][chordIndex] = value;
+      setChorusChords(newChorusChords);
+    },
+    [chorusChords],
+  );
+  const setBridgeChord = useCallback(
+    (rowIndex, chordIndex, value) => {
+      const newBridgeChords = bridgeChords.slice();
+      newBridgeChords[rowIndex][chordIndex] = value;
+      setBridgeChords(newBridgeChords);
+    },
+    [bridgeChords],
+  );
+
+  const addVerseChord = useCallback(
+    (rowIndex) => {
+      const newVerseChords = verseChords.slice();
+      newVerseChords[rowIndex].push('');
+      setVerseChords(newVerseChords);
+    },
+    [verseChords],
+  );
+  const removeVerseChord = useCallback(
+    (rowIndex) => {
+      const newVerseChords = verseChords.slice();
+      newVerseChords[rowIndex].pop();
+      setVerseChords(newVerseChords);
+    },
+    [verseChords],
+  );
+
+  const addChorusChord = useCallback(
+    (rowIndex) => {
+      const newVerseChords = chorusChords.slice();
+      newVerseChords[rowIndex].push('');
+      setChorusChords(newVerseChords);
+    },
+    [chorusChords],
+  );
+  const removeChorusChord = useCallback(
+    (rowIndex) => {
+      const newVerseChords = chorusChords.slice();
+      newVerseChords[rowIndex].pop();
+      setChorusChords(newVerseChords);
+    },
+    [chorusChords],
+  );
+
+  const addBridgeChord = useCallback(
+    (rowIndex) => {
+      const newVerseChords = bridgeChords.slice();
+      newVerseChords[rowIndex].push('');
+      setBridgeChords(newVerseChords);
+    },
+    [bridgeChords],
+  );
+  const removeBridgeChord = useCallback(
+    (rowIndex) => {
+      const newVerseChords = bridgeChords.slice();
+      newVerseChords[rowIndex].pop();
+      setBridgeChords(newVerseChords);
+    },
+    [bridgeChords],
   );
 
   const changeSongName = useCallback((e) => setSongName(e.target.value), []);
@@ -98,9 +167,11 @@ function Main() {
       const newChorusRowsCount = chorusRowsCount + 1;
       setChorusRowsCount(newChorusRowsCount);
       const newChorusArray = { lines: setRowsCountForVerse(chorus.lines, newChorusRowsCount) };
+      const newVerseChords = updateChordsRowCount(chorusChords, newChorusRowsCount);
+      setChorusChords(newVerseChords);
       setChorus(newChorusArray);
     },
-    [chorus, chorusRowsCount],
+    [chorus, chorusRowsCount, chorusChords],
   );
   const decChorusRowsCount = useCallback(
     () => {
@@ -108,9 +179,11 @@ function Main() {
       const newChorusRowsCount = chorusRowsCount - 1;
       setChorusRowsCount(newChorusRowsCount);
       const newChorusArray = { lines: setRowsCountForVerse(chorus.lines, newChorusRowsCount) };
+      const newChorusChords = updateChordsRowCount(chorusChords, newChorusRowsCount);
+      setChorusChords(newChorusChords);
       setChorus(newChorusArray);
     },
-    [chorus, chorusRowsCount],
+    [chorus, chorusRowsCount, chorusChords],
   );
 
   const addBridge = useCallback(
@@ -125,9 +198,11 @@ function Main() {
       const newBridgeRowsCount = bridgeRowsCount + 1;
       setBridgeRowsCount(newBridgeRowsCount);
       const newBridgeArray = { lines: setRowsCountForVerse(bridge.lines, newBridgeRowsCount) };
+      const newBridgeChords = updateChordsRowCount(bridgeChords, newBridgeRowsCount);
+      setBridgeChords(newBridgeChords);
       setBridge(newBridgeArray);
     },
-    [bridge, bridgeRowsCount],
+    [bridge, bridgeRowsCount, bridgeChords],
   );
   const decBridgeRowsCount = useCallback(
     () => {
@@ -135,9 +210,11 @@ function Main() {
       const newBridgeRowsCount = bridgeRowsCount - 1;
       setBridgeRowsCount(newBridgeRowsCount);
       const newBridgeArray = { lines: setRowsCountForVerse(bridge.lines, newBridgeRowsCount) };
+      const newBridgeChords = updateChordsRowCount(bridgeChords, newBridgeRowsCount);
+      setBridgeChords(newBridgeChords);
       setBridge(newBridgeArray);
     },
-    [bridge, bridgeRowsCount],
+    [bridge, bridgeRowsCount, bridgeChords],
   );
 
   return (
@@ -203,10 +280,18 @@ function Main() {
             { !!verses.length && <Chords
               type='verse'
               chords={verseChords}
-              setChord={setVerseChord}
+              setChord={setVerseChord} addChord={addVerseChord} removeChord={removeVerseChord}
             /> }
-            { chorus && <Chords type='chorus' /> }
-            { bridge && <Chords type='bridge' /> }
+            { chorus && <Chords
+              type='chorus'
+              chords={chorusChords}
+              setChord={setChorusChord} addChord={addChorusChord} removeChord={removeChorusChord}
+            /> }
+            { bridge && <Chords
+              type='bridge'
+              chords={bridgeChords}
+              setChord={setBridgeChord} addChord={addBridgeChord} removeChord={removeBridgeChord}
+            /> }
           </section>
           <Button
             id='submit'
