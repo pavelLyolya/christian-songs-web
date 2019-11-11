@@ -239,7 +239,22 @@ function Main() {
             bridge: bridgeChords && bridgeChords.map(row => ({ items: row })),
           },
         };
-        console.log(song)
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessKey = urlParams.get('accessKey');
+        fetch('/admin/create', {
+          method: 'POST',
+          body: JSON.stringify(song),
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Access-Key': accessKey,
+          },
+        }).then(res => res.json())
+          .then((response) => {
+            // eslint-disable-next-line no-alert
+            alert(`Message: ${response.message}`);
+            window.location.reload();
+          })
+          .catch(error => console.error('Error:', error.message));
       }
     },
     [
