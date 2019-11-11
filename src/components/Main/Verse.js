@@ -24,32 +24,32 @@ function Verse({ isButtonsDrawn, type, remove, verse, update, incRowsCount, decR
 
   const changeVerseRow = useCallback(
     (index, value) => {
-      const newRows = verse.lines.slice();
+      const newRows = verse.rows.slice();
       newRows[index] = value;
       update(newRows);
     },
-    [verse.lines, update],
+    [verse.rows, update],
   );
   const addRow = useCallback(
     () => {
-      const newRows = verse.lines.slice();
+      const newRows = verse.rows.slice();
       newRows.push('');
       update(newRows);
       incRowsCount();
     },
-    [verse.lines, update, incRowsCount],
+    [verse.rows, update, incRowsCount],
   );
   const removeRow = useCallback(
     () => {
-      const newRows = verse.lines.slice();
+      const newRows = verse.rows.slice();
       newRows.pop();
       update(newRows);
       decRowsCount();
     },
-    [verse.lines, update, decRowsCount],
+    [verse.rows, update, decRowsCount],
   );
 
-  if (!verse.lines) return null;
+  if (!verse.rows) return null;
   return (
     <fieldset className='verse'>
       <legend className='verse-title'>
@@ -80,7 +80,7 @@ function Verse({ isButtonsDrawn, type, remove, verse, update, incRowsCount, decR
           <DeleteIcon fontSize='large' />
         </IconButton>
       </legend>
-      {verse.lines.map((row, index) => <TextField
+      {verse.rows.map((row, index) => <TextField
         key={index} value={row}
         onChange={(e) => changeVerseRow(index, e.target.value)}
         required

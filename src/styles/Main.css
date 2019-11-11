@@ -70,7 +70,7 @@ input[type=number] {
 .verse-row:not(:last-child), .chords-row:not(:last-child) {
   margin-bottom: 7px;
 }
-#submit {
+:root .submit {
   margin: 0 auto;
   padding: 5px 15px;
   background-color: #fb5145;

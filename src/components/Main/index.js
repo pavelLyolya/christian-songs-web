@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import {
   makeStyles,
   Button,
@@ -23,14 +23,15 @@ const useStyles = makeStyles(theme => ({
 
 function Main() {
   const classes = useStyles();
+  const form = useRef(null);
 
   const [ songName, setSongName ] = useState('');
   const [ versesRowsCount, setVersesRowsCount ] = useState(4);
   const [ chorusRowsCount, setChorusRowsCount ] = useState(4);
   const [ bridgeRowsCount, setBridgeRowsCount ] = useState(4);
-  const [ verses, setVerses ] = useState([{ lines: createEmptyVerse(versesRowsCount) }]);
-  const [ chorus, setChorus ] = useState({ lines: createEmptyVerse(chorusRowsCount) });
-  const [ bridge, setBridge ] = useState({ lines: createEmptyVerse(bridgeRowsCount) });
+  const [ verses, setVerses ] = useState([{ rows: createEmptyVerse(versesRowsCount) }]);
+  const [ chorus, setChorus ] = useState({ rows: createEmptyVerse(chorusRowsCount) });
+  const [ bridge, setBridge ] = useState({ rows: createEmptyVerse(bridgeRowsCount) });
   const [ verseChords, setVerseChords ] = useState(createEmptyChords(versesRowsCount));
   const [ chorusChords, setChorusChords ] = useState(createEmptyChords(chorusRowsCount));
   const [ bridgeChords, setBridgeChords ] = useState(createEmptyChords(bridgeRowsCount));
@@ -114,13 +115,13 @@ function Main() {
   const changeSongName = useCallback((e) => setSongName(e.target.value), []);
 
   const addVerse = useCallback(
-    () => setVerses([ ...verses, { lines: createEmptyVerse(versesRowsCount) } ]),
+    () => setVerses([ ...verses, { rows: createEmptyVerse(versesRowsCount) } ]),
     [verses, versesRowsCount],
   );
   const updateVerse = useCallback(
     (indexToUpdate, value) => {
       const newVersesArray = verses.slice();
-      newVersesArray[indexToUpdate].lines = value;
+      newVersesArray[indexToUpdate].rows = value;
       setVerses(newVersesArray);
     },
     [verses]
@@ -135,7 +136,7 @@ function Main() {
     () => {
       const newVersesRowsCount = versesRowsCount + 1;
       setVersesRowsCount(newVersesRowsCount);
-      const newVersesArray = verses.map((verse) => ({ lines: setRowsCountForVerse(verse.lines, newVersesRowsCount) }));
+      const newVersesArray = verses.map((verse) => ({ rows: setRowsCountForVerse(verse.rows, newVersesRowsCount) }));
       const newVerseChords = updateChordsRowCount(verseChords, newVersesRowsCount);
       setVerseChords(newVerseChords);
       setVerses(newVersesArray);
@@ -147,7 +148,7 @@ function Main() {
       if (versesRowsCount === 0) return;
       const newVersesRowsCount = versesRowsCount - 1;
       setVersesRowsCount(newVersesRowsCount);
-      const newVersesArray = verses.map((verse, index) => ({ lines: setRowsCountForVerse(verse.lines, newVersesRowsCount) }));
+      const newVersesArray = verses.map((verse, index) => ({ rows: setRowsCountForVerse(verse.rows, newVersesRowsCount) }));
       const newVerseChords = updateChordsRowCount(verseChords, newVersesRowsCount);
       setVerseChords(newVerseChords);
       setVerses(newVersesArray);
@@ -156,17 +157,20 @@ function Main() {
   );
 
   const addChorus = useCallback(
-    () => setChorus({ lines: createEmptyVerse(chorusRowsCount) }),
+    () => setChorus({ rows: createEmptyVerse(chorusRowsCount) }),
     [chorusRowsCount]
   );
-  const updateChorus = useCallback((newChorus) => setChorus({ lines: newChorus }), []);
-  const removeChorus = useCallback(() => setChorus(null), []);
+  const updateChorus = useCallback((newChorus) => setChorus({ rows: newChorus }), []);
+  const removeChorus = useCallback(() => {
+    setChorusChords(null);
+    setChorus(null);
+  }, []);
 
   const incChorusRowsCount = useCallback(
     () => {
       const newChorusRowsCount = chorusRowsCount + 1;
       setChorusRowsCount(newChorusRowsCount);
-      const newChorusArray = { lines: setRowsCountForVerse(chorus.lines, newChorusRowsCount) };
+      const newChorusArray = { rows: setRowsCountForVerse(chorus.rows, newChorusRowsCount) };
       const newVerseChords = updateChordsRowCount(chorusChords, newChorusRowsCount);
       setChorusChords(newVerseChords);
       setChorus(newChorusArray);
@@ -178,7 +182,7 @@ function Main() {
       if (chorusRowsCount === 0) return;
       const newChorusRowsCount = chorusRowsCount - 1;
       setChorusRowsCount(newChorusRowsCount);
-      const newChorusArray = { lines: setRowsCountForVerse(chorus.lines, newChorusRowsCount) };
+      const newChorusArray = { rows: setRowsCountForVerse(chorus.rows, newChorusRowsCount) };
       const newChorusChords = updateChordsRowCount(chorusChords, newChorusRowsCount);
       setChorusChords(newChorusChords);
       setChorus(newChorusArray);
@@ -187,17 +191,20 @@ function Main() {
   );
 
   const addBridge = useCallback(
-    () => setBridge({ lines: createEmptyVerse(bridgeRowsCount) }),
+    () => setBridge({ rows: createEmptyVerse(bridgeRowsCount) }),
     [bridgeRowsCount]
   );
-  const updateBridge = useCallback((newBridge) => setBridge({ lines: newBridge }), []);
-  const removeBridge = useCallback(() => setBridge(null), []);
+  const updateBridge = useCallback((newBridge) => setBridge({ rows: newBridge }), []);
+  const removeBridge = useCallback(() => {
+    setBridgeChords(null);
+    setBridge(null);
+  }, []);
 
   const incBridgeRowsCount = useCallback(
     () => {
       const newBridgeRowsCount = bridgeRowsCount + 1;
       setBridgeRowsCount(newBridgeRowsCount);
-      const newBridgeArray = { lines: setRowsCountForVerse(bridge.lines, newBridgeRowsCount) };
+      const newBridgeArray = { rows: setRowsCountForVerse(bridge.rows, newBridgeRowsCount) };
       const newBridgeChords = updateChordsRowCount(bridgeChords, newBridgeRowsCount);
       setBridgeChords(newBridgeChords);
       setBridge(newBridgeArray);
@@ -209,7 +216,7 @@ function Main() {
       if (bridgeRowsCount === 0) return;
       const newBridgeRowsCount = bridgeRowsCount - 1;
       setBridgeRowsCount(newBridgeRowsCount);
-      const newBridgeArray = { lines: setRowsCountForVerse(bridge.lines, newBridgeRowsCount) };
+      const newBridgeArray = { rows: setRowsCountForVerse(bridge.rows, newBridgeRowsCount) };
       const newBridgeChords = updateChordsRowCount(bridgeChords, newBridgeRowsCount);
       setBridgeChords(newBridgeChords);
       setBridge(newBridgeArray);
@@ -217,10 +224,40 @@ function Main() {
     [bridge, bridgeRowsCount, bridgeChords],
   );
 
+  const onSubmit = useCallback(
+    () => {
+      if (form.current.reportValidity()) {
+        const song = {
+          name: songName,
+          publishDate: new Date().toISOString(),
+          verses,
+          chorus,
+          bridge,
+          chords: {
+            verse: verseChords && verseChords.map(row => ({ items: row })),
+            chorus: chorusChords && chorusChords.map(row => ({ items: row })),
+            bridge: bridgeChords && bridgeChords.map(row => ({ items: row })),
+          },
+        };
+        console.log(song)
+      }
+    },
+    [
+      songName,
+      verses,
+      chorus,
+      bridge,
+      verseChords,
+      chorusChords,
+      bridgeChords,
+      form
+    ],
+  )
+
   return (
     <main className='content'>
       <div className='content-wrap wrap'>
-        <form className='form'>
+        <form ref={form} className='form'>
           <section className='song-info'>
             <TextField
               id='song-name'
@@ -294,7 +331,8 @@ function Main() {
             /> }
           </section>
           <Button
-            id='submit'
+            onClick={onSubmit}
+            className='submit'
             variant='contained'
             size='small'
             color='primary'

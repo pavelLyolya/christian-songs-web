@@ -33,6 +33,7 @@ function Chords({ type, chords, setChord, addChord, removeChord }) {
             <FormControl key={chordIndex} className={classes.formControl}>
               <Select
                 value={chord}
+                required
                 onChange={(e) => setChord(rowIndex, chordIndex, e.target.value)}
               >
                 {chordsArray.map((chordConstant, index) => <MenuItem key={index} value={chordConstant}>{chordConstant}</MenuItem>)}
