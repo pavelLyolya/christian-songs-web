@@ -57,22 +57,22 @@ function Verse({ isButtonsDrawn, type, remove, verse, update, incRowsCount, decR
         {
           isButtonsDrawn && (
             <>
-            <Button
-              onClick={addRow}
-              classes={{ root: classes.verseRowButton }}
-              variant='contained'
-              size='small'
-            >
-              Добавить строку
-            </Button>
-            <Button
-              onClick={removeRow}
-              classes={{ root: classes.verseRowButton }}
-              variant='contained'
-              size='small'
-            >
-              Удалить строку
-            </Button>
+              <Button
+                onClick={addRow}
+                classes={{ root: classes.verseRowButton }}
+                variant='contained'
+                size='small'
+              >
+                Добавить строку
+              </Button>
+              <Button
+                onClick={removeRow}
+                classes={{ root: classes.verseRowButton }}
+                variant='contained'
+                size='small'
+              >
+                Удалить строку
+              </Button>
             </>
           )
         }

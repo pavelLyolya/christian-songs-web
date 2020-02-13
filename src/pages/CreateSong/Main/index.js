@@ -4,7 +4,7 @@ import {
   Button,
   TextField,
 } from '@material-ui/core';
-import '../../styles/Main.css';
+import './style.css';
 import Verse from './Verse';
 import Chords from './Chords';
 import {
@@ -12,7 +12,7 @@ import {
   createEmptyChords,
   setRowsCountForVerse,
   updateChordsRowCount
-} from '../../helpers';
+} from '../../../helpers';
 
 const useStyles = makeStyles(theme => ({
   verseRowButton: {

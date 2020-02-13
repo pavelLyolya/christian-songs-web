@@ -5,7 +5,7 @@ import {
   MenuItem,
   Select,
 } from '@material-ui/core';
-import { chordsArray } from '../../constants';
+import { chordsArray } from '../../../constants';
 
 const verseTypes = {
   verse: 'Куплет',
