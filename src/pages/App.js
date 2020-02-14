@@ -34,8 +34,10 @@ function App() {
           <Login />
         </Route>
         <Route path='/'>
-          <h1>Привет! Это молодежный сборник!</h1>
-          <Link to='/create'>Добавь песню :)</Link>
+          <div style={{ textAlign: 'center', marginTop: 300 }}>
+            <h1>Привет! Это молодежный сборник!</h1>
+            <Link to='/create'>Добавь песню :)</Link>
+          </div>
         </Route>
       </Switch>
 
