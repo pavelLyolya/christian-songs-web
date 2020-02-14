@@ -15,7 +15,8 @@ export default function () {
   const onUsernameChange = useCallback((event) => setUsername(event.target.value), []);
   const onPasswordChange = useCallback((event) => setPassword(event.target.value), []);
 
-  const submitLogin = useCallback(async () => {
+  const submitLogin = useCallback(async (e) => {
+    e.preventDefault();
     if (formRef && formRef.current.reportValidity()) {
       const isAuth = await Authentication.authenticate(username, password);
       if (!isAuth) {
@@ -30,7 +31,7 @@ export default function () {
   return (
     <div className="main">
       <p className="sign" align="center">Вход</p>
-      <form ref={formRef} className="form1" >
+      <form ref={formRef} onSubmit={submitLogin} className="form1" >
         <input
           onChange={onUsernameChange}
           value={username}
@@ -49,6 +50,7 @@ export default function () {
           placeholder="Password"
           required
         />
+        <input type='submit' style={{ display: 'none' }} />
         <Button
           onClick={submitLogin}
           className='submit'
