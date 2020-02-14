@@ -4,6 +4,9 @@
   box-shadow: 0 0 16px #3d2d2d;
 }
 .header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   min-height: 60px;
   background-color: #fb5145;
 }
