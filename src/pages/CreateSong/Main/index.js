@@ -13,8 +13,9 @@ import {
   setRowsCountForVerse,
   updateChordsRowCount
 } from '../../../helpers';
+import {createSong} from "../../../api/songs";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   verseRowButton: {
     marginTop: '10px',
     marginRight: '4px',
@@ -148,7 +149,7 @@ function Main() {
       if (versesRowsCount === 0) return;
       const newVersesRowsCount = versesRowsCount - 1;
       setVersesRowsCount(newVersesRowsCount);
-      const newVersesArray = verses.map((verse, index) => ({ rows: setRowsCountForVerse(verse.rows, newVersesRowsCount) }));
+      const newVersesArray = verses.map((verse) => ({ rows: setRowsCountForVerse(verse.rows, newVersesRowsCount) }));
       const newVerseChords = updateChordsRowCount(verseChords, newVersesRowsCount);
       setVerseChords(newVerseChords);
       setVerses(newVersesArray);
@@ -225,7 +226,7 @@ function Main() {
   );
 
   const onSubmit = useCallback(
-    () => {
+    async () => {
       if (form.current.reportValidity()) {
         const song = {
           name: songName,
@@ -239,22 +240,8 @@ function Main() {
             bridge: bridgeChords && bridgeChords.map(row => ({ items: row })),
           },
         };
-        const urlParams = new URLSearchParams(window.location.search);
-        const accessKey = urlParams.get('accessKey');
-        fetch('/admin/create', {
-          method: 'POST',
-          body: JSON.stringify(song),
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Access-Key': accessKey,
-          },
-        }).then(res => res.json())
-          .then((response) => {
-            // eslint-disable-next-line no-alert
-            alert(`Message: ${response.message}`);
-            window.location.reload();
-          })
-          .catch(error => console.error('Error:', error.message));
+        const { created } = await createSong(song);
+        if (created) window.location.reload();
       }
     },
     [
@@ -267,7 +254,7 @@ function Main() {
       bridgeChords,
       form
     ],
-  )
+  );
 
   return (
     <main className='content'>
