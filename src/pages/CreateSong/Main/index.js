@@ -25,6 +25,7 @@ const useStyles = makeStyles(() => ({
 function Main() {
   const classes = useStyles();
   const form = useRef(null);
+  const [isSubmitButtonDisabled, changeSubmitButtonStatus] = useState(false);
 
   const [ songName, setSongName ] = useState('');
   const [ versesRowsCount, setVersesRowsCount ] = useState(4);
@@ -228,6 +229,7 @@ function Main() {
   const onSubmit = useCallback(
     async () => {
       if (form.current.reportValidity()) {
+        changeSubmitButtonStatus(true);
         const song = {
           name: songName,
           publishDate: new Date().toISOString(),
@@ -252,7 +254,8 @@ function Main() {
       verseChords,
       chorusChords,
       bridgeChords,
-      form
+      form,
+      isSubmitButtonDisabled
     ],
   );
 
@@ -333,6 +336,7 @@ function Main() {
             /> }
           </section>
           <Button
+            disabled={isSubmitButtonDisabled}
             onClick={onSubmit}
             className='submit'
             variant='contained'
